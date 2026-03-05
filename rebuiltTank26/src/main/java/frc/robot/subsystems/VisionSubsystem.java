@@ -74,4 +74,22 @@ public class VisionSubsystem extends SubsystemBase {
             drive.driveArcade(0, turn);
         });
     }
+    public Command fireProjectileCommand(double range, double heightTarget){
+        double gravity = 9.81;
+        double wheelCircumfrence = 0.11999999;
+        double heightLeBron = 0.4953;
+        double thota = 80; // this is in degrees to be converted to radians later
+        range +=  0.4318; //this accounts for the distance from the robots projectile storage to the fron to f the robot
+        double cosSquared = Math.cos(Math.toRadians(thota))*Math.cos(Math.toRadians(thota));
+        double constantThing = (25*60/26*Math.PI*wheelCircumfrence) * (Math.sqrt(gravity/2*cosSquared));
+        double targetRpm = constantThing*(range/
+        (Math.sqrt(range*
+        Math.tan(Math.toRadians(range))
+        -(heightTarget - heightLeBron))))*1.4; // the 1.4 is because i assume its a closed system so to account for losses
+        return run(() -> {
+            fuelMotor.setRefernce(targetRpm, ControlType.kVelocity);
+        });
+    }
 }
+
+
